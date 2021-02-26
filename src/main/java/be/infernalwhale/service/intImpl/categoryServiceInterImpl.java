@@ -1,13 +1,12 @@
-package be.infernalwhale.service.fake;
+package be.infernalwhale.service.intImpl;
 
 import be.infernalwhale.model.Category;
 import be.infernalwhale.service.CategoryService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class MockCategoryService implements CategoryService {
-    private final List<Category> categories = generateFakeList();
+public class categoryServiceInterImpl implements CategoryService {
+    private final List<Category> categories = generateListDBATC();
 
     @Override
     public List<Category> getCategories() {
@@ -32,7 +31,7 @@ public class MockCategoryService implements CategoryService {
         return true;
     }
 
-    private List<Category> generateFakeList() {
+    private List<Category> generateListDBATC() {
         return new ArrayList<>(List.of(
                 new Category(2, "Alcoholarm"),
                 new Category(3, "Alcoholvrij"),

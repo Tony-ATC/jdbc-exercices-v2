@@ -1,9 +1,9 @@
 package be.infernalwhale.service;
 
-import be.infernalwhale.service.fake.MockBrewerService;
-import be.infernalwhale.service.fake.MockCategoryService;
-import be.infernalwhale.service.fake.MockConnectionManager;
-import be.infernalwhale.service.fake.MockBeerService;
+import be.infernalwhale.service.intImpl.brewerServiceInterImpl;
+import be.infernalwhale.service.intImpl.categoryServiceInterImpl;
+import be.infernalwhale.service.intImpl.connectionManagerInterImpl;
+import be.infernalwhale.service.intImpl.beerServiceInterImpl;
 
 /**
  * This is the ServiceFactory. This class will provide the implementations for the different Service interfaces
@@ -20,19 +20,19 @@ public class ServiceFactory {
 
     private static ConnectionManager connectionManager;
     public static ConnectionManager createConnectionManager() {
-        if (connectionManager == null) connectionManager = new MockConnectionManager();
+        if (connectionManager == null) connectionManager = new connectionManagerInterImpl();
         return connectionManager;
     }
 
     public static CategoryService createCategoryService() {
-        return new MockCategoryService();
+        return new categoryServiceInterImpl();
     }
 
     public static BrewersService createBrewersService() {
-        return new MockBrewerService();
+        return new brewerServiceInterImpl();
     }
 
     public static BeerService createBeerService() {
-        return new MockBeerService();
+        return new beerServiceInterImpl();
     }
 }

@@ -1,4 +1,4 @@
-package be.infernalwhale.service.fake;
+package be.infernalwhale.service.intImpl;
 
 import be.infernalwhale.service.ConnectionManager;
 
@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class MockConnectionManager implements ConnectionManager {
+public class connectionManagerInterImpl implements ConnectionManager {
     private Connection connection;
 
     @Override
     public Connection createConnection(String url, String user, String pwd) {
-        return connection = createFakeConnection();
+        return connection = createConnectionDBATC();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class MockConnectionManager implements ConnectionManager {
         this.connection = null;
     }
 
-    private Connection createFakeConnection() {
+    private Connection createConnectionDBATC() {
         return new Connection() {
             @Override
             public Statement createStatement() throws SQLException {

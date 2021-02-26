@@ -1,4 +1,4 @@
-package be.infernalwhale.service.fake;
+package be.infernalwhale.service.intImpl;
 
 import be.infernalwhale.model.Brewer;
 import be.infernalwhale.service.BrewersService;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class MockBrewerService implements BrewersService {
+public class brewerServiceInterImpl implements BrewersService {
     private final List<Brewer> brewers = generateBrewers();
 
     @Override
