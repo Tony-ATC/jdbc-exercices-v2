@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class brewerServiceInterImpl implements BrewersService {
+public class brewerServiceATC implements BrewersService {
     private final List<Brewer> brewers = generateBrewers();
 
     @Override

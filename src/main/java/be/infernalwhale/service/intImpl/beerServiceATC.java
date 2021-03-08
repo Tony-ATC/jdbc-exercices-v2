@@ -8,7 +8,7 @@ import be.infernalwhale.service.BeerService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class beerServiceInterImpl implements BeerService {
+public class beerServiceATC implements BeerService {
     private final List<Beer> beers = generateBeerList();
 
 

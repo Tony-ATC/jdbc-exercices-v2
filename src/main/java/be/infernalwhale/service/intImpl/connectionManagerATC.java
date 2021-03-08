@@ -7,11 +7,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-public class connectionManagerInterImpl implements ConnectionManager {
+public class connectionManagerATC implements ConnectionManager {
     private Connection connection;
 
     @Override
-    public Connection createConnection(String url, String user, String pwd) {
+    public Connection createConnection(String url, String user, String pwd) throws SQLException {
+        if (connection == null) connection = DriverManager.getConnection(url, user, pwd);
         return connection = createConnectionDBATC();
     }
 
@@ -23,7 +24,6 @@ public class connectionManagerInterImpl implements ConnectionManager {
     @Override
     public void closeConnection() throws SQLException {
         this.connection.close();
-        this.connection = null;
     }
 
     private Connection createConnectionDBATC() {

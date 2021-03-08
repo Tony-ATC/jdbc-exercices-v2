@@ -1,9 +1,9 @@
 package be.infernalwhale.service;
 
-import be.infernalwhale.service.intImpl.brewerServiceInterImpl;
-import be.infernalwhale.service.intImpl.categoryServiceInterImpl;
-import be.infernalwhale.service.intImpl.connectionManagerInterImpl;
-import be.infernalwhale.service.intImpl.beerServiceInterImpl;
+import be.infernalwhale.service.intImpl.beerServiceATC;
+import be.infernalwhale.service.intImpl.brewerServiceATC;
+import be.infernalwhale.service.intImpl.categoryServiceATC;
+import be.infernalwhale.service.intImpl.connectionManagerATC;
 
 /**
  * This is the ServiceFactory. This class will provide the implementations for the different Service interfaces
@@ -20,19 +20,25 @@ public class ServiceFactory {
 
     private static ConnectionManager connectionManager;
     public static ConnectionManager createConnectionManager() {
-        if (connectionManager == null) connectionManager = new connectionManagerInterImpl();
+        if (connectionManager == null) connectionManager = new connectionManagerATC();
         return connectionManager;
     }
 
+    private static CategoryService categoryService;
     public static CategoryService createCategoryService() {
-        return new categoryServiceInterImpl();
+        if(categoryService == null) categoryService = new categoryServiceATC();
+        return categoryService;
     }
 
+    private static BrewersService brewersService;
     public static BrewersService createBrewersService() {
-        return new brewerServiceInterImpl();
+        if(brewersService == null) brewersService = new brewerServiceATC();
+        return brewersService;
     }
 
+    private static BeerService beerService;
     public static BeerService createBeerService() {
-        return new beerServiceInterImpl();
+        if(beerService == null) beerService = new beerServiceATC();
+        return beerService;
     }
 }
