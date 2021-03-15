@@ -1,5 +1,6 @@
 package be.infernalwhale.service.intImpl;
 
+import be.infernalwhale.model.Brewer;
 import be.infernalwhale.model.Category;
 import be.infernalwhale.service.CategoryService;
 import be.infernalwhale.service.ConnectionManager;
@@ -16,13 +17,38 @@ public class categoryServiceATC implements CategoryService {
 
     private final ConnectionManager connectionManager = ServiceFactory.createConnectionManager();
 
+    public Category getCategories(int category_id) {
+        String query = "SELECT * FROM Cat WHERE id LIKE ?";
+        Category cat = null;
+
+        try (Connection connection = connectionManager.getConnection();
+
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, String.valueOf(category_id));
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                String category = rs.getString("Category");
+                cat = new Category(category_id, category);
+            }
+
+        }
+        catch (SQLException IDK) {
+            IDK.printStackTrace();
+        }
+        return cat;
+    }
+
     @Override
     public List<Category> getCategories() {
         List<Category> catList = new ArrayList<>();
         String query = "SELECT * FROM Cat";
 
         try (Connection connection = connectionManager.getConnection();
+
              PreparedStatement statement = connection.prepareStatement(query)) {
+
             ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
@@ -109,5 +135,6 @@ public class categoryServiceATC implements CategoryService {
                 new Category(16, "Geuze")
         ));
     }
+
 
 }

@@ -9,7 +9,7 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 

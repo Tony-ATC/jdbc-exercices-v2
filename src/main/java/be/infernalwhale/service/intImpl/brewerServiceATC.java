@@ -1,10 +1,17 @@
 package be.infernalwhale.service.intImpl;
 
+import be.infernalwhale.model.Beer;
 import be.infernalwhale.model.Brewer;
 import be.infernalwhale.service.BrewersService;
+import be.infernalwhale.service.ConnectionManager;
+import be.infernalwhale.service.ServiceFactory;
 import be.infernalwhale.service.data.Valuta;
 import be.infernalwhale.service.exception.ValidationException;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,9 +20,65 @@ import java.util.stream.Collectors;
 public class brewerServiceATC implements BrewersService {
     private final List<Brewer> brewers = generateBrewers();
 
+    private final ConnectionManager connectionManager = ServiceFactory.createConnectionManager();
+    private Object Brewer;
+
+    public Brewer getBrewers(int brewer_id) {
+        String query = "SELECT * FROM brewers WHERE id LIKE ?";
+        Brewer brewer = null;
+
+        try (Connection connection = connectionManager.getConnection();
+
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, String.valueOf(brewer_id));
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("Name");
+                String address = rs.getString("Address");
+                int zipcode = rs.getInt("Zipcode");
+                String city = rs.getString("City");
+                int turnover = rs.getInt("Turnover");
+                Brewer = new Brewer(brewer_id, name, address, zipcode, city, turnover);
+            }
+
+            }
+        catch (SQLException IDK) {
+            IDK.printStackTrace();
+        }
+        return brewer;
+    }
+
     @Override
     public List<Brewer> getBrewers() {
-        return this.brewers;
+
+        List<Brewer> homerList = new ArrayList<>();
+        String query = "SELECT * FROM Brewers";
+
+        try (Connection connection = connectionManager.getConnection();
+
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt("ID");
+                String name = rs.getString("Name");
+                String address = rs.getString("Address");
+                int zipcode = rs.getInt("Zipcode");
+                String city = rs.getString("City");
+                int turnover = rs.getInt("Turnover");
+
+
+                Brewer homer = new Brewer(id, name, address, zipcode, city, turnover);
+                homerList.add(homer);
+            }
+
+        } catch (SQLException IDK) {
+            IDK.printStackTrace();
+        }
+        return homerList;
     }
 
     @Override
@@ -41,25 +104,65 @@ public class brewerServiceATC implements BrewersService {
     }
 
     @Override
-    public Brewer createBrewer(Brewer brewer) throws ValidationException {
-        if (brewer.getTurnover() < 0) throw new ValidationException("Turnover can not be negative");
-        if (brewer.getId() != null && !brewer.getId().equals(0))
-            throw new ValidationException("Id must be null or zero when creating a new Brewer");
+    public Brewer createBrewer(Brewer brewer)  {
+        String query = "INSERT INTO Brewer (ID, Name, Address, Zipcode, City, Turnover) VALUES (?, ?, ?, ?, ?, ?)";
 
-        brewer.setId(Integer.MAX_VALUE - new Random().nextInt());
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
 
-        return new Brewer(brewer);
+            statement.setInt(1, brewer.getId());
+            statement.setString(2, brewer.getName());
+            statement.setString(3, brewer.getAddress());
+            statement.setInt(4, brewer.getZipcode());
+            statement.setString(5, brewer.getCity());
+            statement.setInt(6, brewer.getTurnover());
+            statement.execute();
+
+        } catch (SQLException IDK) {
+            IDK.printStackTrace();
+        }
+        return brewer;
     }
 
     @Override
     public Brewer updateBrewer(Brewer brewer) throws ValidationException {
-        if (brewer.getTurnover() < 0) throw new ValidationException("Turnover can not be negative");
+        String query = "UPDATE Brewers Set(name, address, zipcode, city, turnover) = ? WHERE Id (?)";
 
-        return new Brewer(brewer);
+        try (Connection connection = connectionManager.getConnection();
+
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, brewer.getId());
+            statement.setString(2, brewer.getName());
+            statement.setString(3, brewer.getAddress());
+            statement.setInt(4, brewer.getZipcode());
+            statement.setString(5, brewer.getCity());
+            statement.setInt(6, brewer.getTurnover());
+            statement.execute();
+
+            if (brewer.getTurnover() < 0) throw new ValidationException("Turnover can not be negative");
+
+
+        } catch (SQLException IDK) {
+            IDK.printStackTrace();
+        }
+        return brewer;
     }
 
     @Override
     public boolean deleteBrewerById(Integer id) {
+        String query = "DELETE FROM Brewers WHERE Id (?)";
+
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, id);
+            statement.execute();
+
+        } catch (SQLException IDK) {
+            IDK.printStackTrace();
+        }
+
         return true;
     }
 
@@ -79,4 +182,5 @@ public class brewerServiceATC implements BrewersService {
         brewerCopy.setTurnover(turnover);
         return brewerCopy;
     }
+
 }
